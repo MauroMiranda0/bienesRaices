@@ -1,6 +1,8 @@
 .barra {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding-top: 3rem;
     @include tablet {
         flex-direction: row;
@@ -9,9 +11,14 @@
 }
 
 .navegacion {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s ease-in-out, opacity 0.5s linear;
     @include tablet {
         display: flex;
         align-items: center;
+        opacity: 1;
+        visibility: visible;
     }
     a {
         color: $blanco;
@@ -27,4 +34,22 @@
             }
         }
     }
+}
+
+
+/* Menu Responsive */
+
+.mobile-menu {
+    @include tablet {
+        display: none;
+    }
+    img {
+        width: 3rem;
+        padding: 0;
+    }
+}
+
+.mostrar {
+    opacity: 1;
+    visibility: visible;
 }
