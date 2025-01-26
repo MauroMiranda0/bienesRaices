@@ -1,3 +1,24 @@
+.derecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include tablet {
+        align-items: flex-end;
+    }
+    .dark-mode-boton {
+        width: 3rem;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        filter: invert(100%);
+        &:hover {
+            cursor: pointer;
+        }
+        @include tablet {
+            margin-top: 0;
+        }
+    }
+}
+
 .barra {
     display: flex;
     flex-direction: column;
@@ -7,13 +28,15 @@
     @include tablet {
         flex-direction: row;
         justify-content: space-between;
+        align-items: flex-end;
     }
 }
 
 .navegacion {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0.3s ease-in-out, opacity 0.5s linear;
+    height: 0;
+    transition: visibility 0.3s ease-in-out, opacity 0.5s linear, height 0.5s linear;
     @include tablet {
         display: flex;
         align-items: center;
@@ -32,6 +55,9 @@
             &:last-of-type {
                 margin-right: 0;
             }
+        }
+        &:hover {
+            color: $verde;
         }
     }
 }
@@ -52,4 +78,5 @@
 .mostrar {
     opacity: 1;
     visibility: visible;
+    height: auto;
 }
