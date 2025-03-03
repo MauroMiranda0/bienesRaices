@@ -4,10 +4,14 @@
     $db=conectarDB();
     // var_dump($db);
 
+    //Arreglo con mensajes de errores
+    $errores = [];
+
+    //Ejecutar el codigo despues de que el usuario envia el formulario
     if($_SERVER['REQUEST_METHOD']==='POST'){
-        echo "<pre>";
+        /* echo "<pre>";
         var_dump($_POST);
-        echo "</pre>";
+        echo "</pre>"; */
 
         $titulo = $_POST['titulo'];
         $precio = $_POST['precio'];
@@ -17,15 +21,46 @@
         $estacionamiento = $_POST['estacionamiento'];
         $vendedor_id = $_POST['vendedor'];
 
-        //Insertar en la Base de Datos
-        $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedor_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedor_id') ";
-
-        //echo query
-        $resultado = mysqli_query($db, $query);
-
-        if($resultado){
-            echo "Insertado correctamente";
+        if(!$titulo){
+            $errores[] = "Debes añadir un titulo";
         }
+        if(!$precio){
+            $errores[] = "Debes añadir un precio";
+        }
+        if(strlen($descripcion) < 50){
+            $errores[] = "Debes añadir una descripción con al menos 50 caracteres";
+        }
+        if(!$habitaciones){
+            $errores[] = "Debes añadir un número de habitaciones";
+        }
+        if(!$wc){
+            $errores[] = "Debes añadir un número de baños";
+        }
+        if(!$estacionamiento){
+            $errores[] = "Debes añadir un número de lugares de estacionamiento";
+        }
+
+        if(!$vendedor_id){
+            $errores[] = "Debes elegir un vendedor";
+        }
+
+        /* echo "<pre>";
+        var_dump($errores);
+        echo "</pre>"; */
+
+        //Revisar que el arreglo de errores este vacio
+        if(empty($errores)){
+            //Insertar en la Base de Datos
+            $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedor_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedor_id') ";
+
+            //echo query
+            $resultado = mysqli_query($db, $query);
+
+            if($resultado){
+                echo "Insertado correctamente";
+            }
+        }
+        
     }
 
     require '../../includes/funciones.php';
@@ -36,6 +71,18 @@
         <h1>Crear</h1>
 
         <a href="/admin" class="boton boton-verde">Regresar</a>
+
+        <?php
+            foreach ($errores as $error):
+        ?>
+        <div class="alerta error">
+            <?php
+                echo $error;
+            ?>
+        </div>
+        <?php
+            endforeach;
+        ?>
 
         <form method="POST" action="/admin/propiedades/crear.php" class="formulario">
             <fieldset>
@@ -64,6 +111,7 @@
             <fieldset>
                 <legend>Vendedor</legend>
                 <select name="vendedor">
+                    <option value="">-- Seleccionar --</option>
                     <option value="1">Juan</option>
                     <option value="2">Karen</option>
                     </select>
